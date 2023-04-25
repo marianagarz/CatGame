@@ -7,8 +7,8 @@ public class CatEdge extends Edge{
 	public CatEdge(int v, int w, double weight){
 		super(v, w, weight);
 	}
-	public void changeWeight(double w){
-		weight = w;
+	public void changeWeight(){
+		weight = Double.POSITIVE_INFINITY;
 	}
 	
 	public double weight(){
