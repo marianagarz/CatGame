@@ -1,10 +1,13 @@
 import edu.princeton.cs.algs4.EdgeWeightedGraph; 
 import edu.princeton.cs.algs4.Edge;
+import edu.princeton.cs.algs4.DijkstraUndirectedSP;
 import java.util.Random;
 
 public class CatGame{
 	
 	EdgeWeightedGraph board; 
+	DijkstraUndirectedSP shortestPath; 
+	
 	boolean[] marked; 
 	int size; 
 	int catPosition;
@@ -53,7 +56,7 @@ public class CatGame{
 			e.changeWeight(); 
 		}
 		
-		//MOVE CAT NOW!
+		shortestPath = new DijkstraUndirectedSP(board, catPosition); 
 		
 	}
 	
