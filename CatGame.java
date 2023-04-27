@@ -11,15 +11,18 @@ public class CatGame{
 	boolean[] marked; 
 	int size; 
 	int catPosition;
+	int freedom;
 	
 	public CatGame(int n){
 		size = n; 
+		freedom = n * n; 
 		//new graph of size n*n 
 		board = new EdgeWeightedGraph(n * n + 1); 
 		marked = new boolean[n * n + 1]; 
-		
 		catPosition = index(n / 2, n / 2);
+		boolean[][] hasEdge = new boolean[n][n];
 		
+		//makes edges for interior squares
 		for (int row = 1; row < n-1; row++){
 			for (int col = 1; col < n -1; col++){
 				int  v = index(row, col);
@@ -30,6 +33,26 @@ public class CatGame{
 				board.addEdge(new CatEdge(v, v + n));
 				board.addEdge(new CatEdge(v, v + n - 1));
 			}
+		}
+		
+		//makes edges for squares bordering freedom
+		for (int i = 0; i < n; i ++){
+			int v; 
+			//top row:
+			v = index(0 , i); 
+			board.addEdge(new CatEdge(v, freedom)); 
+			
+			//bottom row 
+			v = index(n, i);
+			board.addEdge(new CatEdge(v, freedom)); 
+			
+			//left col
+			v = index(i, 0);
+			board.addEdge(new CatEdge(v, freedom)); 
+			
+			//right col 
+			v = index(i, n); 
+			board.addEdge(new CatEdge(v, freedom)); 
 		}
 		
 		Random rand = new Random();
@@ -71,7 +94,8 @@ public class CatGame{
 		int[] result = {row, col};
 		return result;
 		
-	}		
+	}
+	
 	//boolean catHasEscaped(); 
 	
 	boolean catIsTrapped(){
