@@ -14,4 +14,5 @@ public class CatEdge extends Edge{
 	public double weight(){
 		return weight;
 	}
+	
 }
