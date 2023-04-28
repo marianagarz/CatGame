@@ -2,6 +2,7 @@ import edu.princeton.cs.algs4.EdgeWeightedGraph;
 import edu.princeton.cs.algs4.Edge;
 import edu.princeton.cs.algs4.DijkstraUndirectedSP;
 import java.util.Random;
+import edu.princeton.cs.algs4.Stack; 
 
 public class CatGame{
 	
@@ -43,7 +44,7 @@ public class CatGame{
 			board.addEdge(new CatEdge(v, freedom)); 
 			
 			//bottom row 
-			v = index(n, i);
+			v = index((n-1), i);
 			board.addEdge(new CatEdge(v, freedom)); 
 			
 			//left col
@@ -51,22 +52,22 @@ public class CatGame{
 			board.addEdge(new CatEdge(v, freedom)); 
 			
 			//right col 
-			v = index(i, n); 
+			v = index(i, (n-1)); 
 			board.addEdge(new CatEdge(v, freedom)); 
 		}
 		
-		Random rand = new Random();
-		int num = rand.nextInt(n / 2);
-		while(num > 0){
-			int row = rand.nextInt(n * n); 
-			int col = rand.nextInt(n * n); 
-			while (marked(row, col)){
-				row = rand.nextInt(n * n);
-				col = rand.nextInt(n * n);
-			}
-			markTile(row, col);
-			num--; 
-		}
+		//Random rand = new Random();
+		//int num = rand.nextInt(n / 2);
+		//while(num > 0){
+			//int row = rand.nextInt(n * n); 
+			//int col = rand.nextInt(n * n); 
+			//while (marked(row, col)){												NOTE TO SELF: FIX RANDOM !!!!
+				//row = rand.nextInt(n * n);
+				//col = rand.nextInt(n * n);
+			//}
+			//markTile(row, col);
+			//num--; 
+		//}
 		
 	}
 	
@@ -80,6 +81,10 @@ public class CatGame{
 		}
 		
 		shortestPath = new DijkstraUndirectedSP(board, catPosition); 
+		
+		Stack stack = (Stack) shortestPath.pathTo(freedom); 
+		CatEdge nextMove = (CatEdge) stack.pop();
+		catPosition = nextMove.other(catPosition);
 		
 	}
 	
@@ -96,7 +101,9 @@ public class CatGame{
 		
 	}
 	
-	//boolean catHasEscaped(); 
+	boolean catHasEscaped(){
+		return catPosition == freedom; 
+	}
 	
 	boolean catIsTrapped(){
 		for(Edge i : board.adj(catPosition)){
@@ -104,12 +111,12 @@ public class CatGame{
 			if (e.weight() == 1)
 				return false; 
 		}
-		return true;
+		return false;//true;			NOTE FIX THIS
 	}
 	
 	
 	public int index(int row, int col){
-		return row * size + col;
+		return row * (size) + col;
 	}
 	
 }
