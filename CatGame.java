@@ -13,6 +13,8 @@ public class CatGame{
 	int size; 
 	int catPosition;
 	int freedom;
+	int randNum;
+  
 	
 	public CatGame(int n){
 		size = n; 
@@ -56,18 +58,17 @@ public class CatGame{
 			board.addEdge(new CatEdge(v, freedom)); 
 		}
 		
-		//Random rand = new Random();
-		//int num = rand.nextInt(n / 2);
-		//while(num > 0){
-			//int row = rand.nextInt(n * n); 
-			//int col = rand.nextInt(n * n); 
-			//while (marked(row, col)){												NOTE TO SELF: FIX RANDOM !!!!
-				//row = rand.nextInt(n * n);
-				//col = rand.nextInt(n * n);
-			//}
-			//markTile(row, col);
-			//num--; 
-		//}
+		randNum = (int) ((size/2)*(Math.random()));
+		int row; 
+		int col; 
+		while (randNum > 0){
+			row = (int) (size * (Math.random())); 
+			col = (int) (size * (Math.random()));
+			if (!marked (row, col)){
+				markTile(row,col);
+				randNum--;
+			}
+		}
 		
 	}
 	
@@ -80,11 +81,12 @@ public class CatGame{
 			e.changeWeight(); 
 		}
 		
-		shortestPath = new DijkstraUndirectedSP(board, catPosition); 
-		
-		Stack stack = (Stack) shortestPath.pathTo(freedom); 
-		CatEdge nextMove = (CatEdge) stack.pop();
-		catPosition = nextMove.other(catPosition);
+		if(randNum == 0){
+			shortestPath = new DijkstraUndirectedSP(board, catPosition); 
+			Stack stack = (Stack) shortestPath.pathTo(freedom); 
+			CatEdge nextMove = (CatEdge) stack.pop();
+			catPosition = nextMove.other(catPosition);
+		}
 		
 	}
 	
@@ -108,10 +110,10 @@ public class CatGame{
 	boolean catIsTrapped(){
 		for(Edge i : board.adj(catPosition)){
 			CatEdge e = (CatEdge) i;
-			if (e.weight() == 1)
+			if (e.weight() != Double.POSITIVE_INFINITY)
 				return false; 
 		}
-		return false;//true;			NOTE FIX THIS
+		return true;//true;			NOTE FIX THIS
 	}
 	
 	
